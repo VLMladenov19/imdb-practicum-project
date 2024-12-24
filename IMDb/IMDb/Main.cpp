@@ -1,5 +1,7 @@
 #include <iostream>
 #include "StrUtils.h"
+#include "Users.h"
+#include "Response.h"
 
 int main()
 {
@@ -10,4 +12,8 @@ int main()
 	{
 		std::cout << words[i] << "\n";
 	}
+
+	Response response = addUser(User("username", "pass", 0));
+
+	std::cout << response.isSuccessful << " " << response.message;
 }
