@@ -27,7 +27,18 @@ User* getUser(const char* username)
 	char line[1024];
 	while (file.getline(line, 1024))
 	{
+		size_t infoCount = 0;
+		char** userInfo = split(line, ',', infoCount);
+		
+		if (infoCount != 3 || strCmp(username, userInfo[0]))
+		{
+			freeMemory(userInfo, infoCount);
+			continue;
+		}
 
+		User* user = new User(userInfo[0], userInfo[1], strToNum(userInfo[2]));
+		freeMemory(userInfo, infoCount);
+		return user;
 	}
 
 	return nullptr;
