@@ -1,9 +1,7 @@
 #include <iostream>
-#include "StrUtils.h"
-#include "Users.h"
-#include "Response.h"
+#include "Menus.h"
 
 int main()
 {
-	
+	chooseRole();
 }

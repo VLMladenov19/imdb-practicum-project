@@ -24,8 +24,8 @@ User* getUser(const char* username)
 {
 	std::ifstream file("files/users.txt");
 
-	char line[1024];
-	while (file.getline(line, 1024))
+	char line[STR_SIZE + 1];
+	while (file.getline(line, STR_SIZE))
 	{
 		size_t infoCount = 0;
 		char** userInfo = split(line, ',', infoCount);

@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "StrUtils.h"
 
 size_t strLen(const char* str)
@@ -115,6 +117,28 @@ int strToNum(const char* str)
 	}
 
 	return num;
+}
+
+char* fixSize(char* str)
+{
+	char* fixed = new char[strLen(str) + 1];
+	strCopy(fixed, str);
+	
+	delete[] str;
+	return fixed;
+}
+
+char* writeStr()
+{
+	char* str = new char[STR_SIZE + 1];
+	
+	if (std::cin.peek() == '\n')
+	{
+		std::cin.ignore();
+	}
+	std::cin.getline(str, STR_SIZE);
+
+	return fixSize(str);
 }
 
 void freeMemory(char** str, size_t size)

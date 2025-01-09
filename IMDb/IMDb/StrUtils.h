@@ -8,4 +8,6 @@ int strCmp(const char* str1, const char* str2);
 char** split(const char* str, const char delimiter, size_t& outSize);
 short charToDigit(const char c);
 int strToNum(const char* str);
+char* fixSize(const char*);
+char* writeStr();
 void freeMemory(char** str, size_t size);
