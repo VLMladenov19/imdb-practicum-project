@@ -1,3 +1,4 @@
 Django Unchaine,2012,Comedy,uentin Tarantino,amie Foxx, Christopher Waltz, Leonardo DiCaprio
 Django Unchained,2012,Comedy,uentin Tarantino,amie Foxx, Christopher Waltz, Leonardo DiCaprio
 Django Unchained,2012,Comedy,Quentin Tarantino,Jamie Foxx, Christopher Waltz, Leonardo DiCaprio
+Django is wow,2022,eeee,qew,qwe

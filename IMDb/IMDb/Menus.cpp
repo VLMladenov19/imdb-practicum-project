@@ -51,8 +51,10 @@ void adminMenu()
 		addMovieMenu();
 		break;
 	case 2:
+		searchByTitleMenu(*adminMenu);
 		break;
 	case 3:
+		searchByGenreMenu(*adminMenu);
 		break;
 	case 4:
 		break;
@@ -102,4 +104,48 @@ void addMovieMenu()
 	}
 
 	adminMenu();
+}
+
+void searchByTitleMenu(void (*returnMenu)())
+{
+	std::cout << "Title: ";
+	char* title = writeStr();
+
+	size_t moviesCount = 0;
+	Movie** movies = getMoviesBy(title, *compareTitle, moviesCount);
+
+	for (size_t i = 0; i < moviesCount; i++)
+	{
+		std::cout << "\t";
+		std::cout << movies[i]->title << ", ";
+		std::cout << movies[i]->year << ", ";
+		std::cout << movies[i]->genre << ", ";
+		std::cout << movies[i]->director << ", ";
+		std::cout << movies[i]->cast << "\n";
+	}
+
+	std::cin.get();
+	returnMenu();
+}
+
+void searchByGenreMenu(void (*returnMenu)())
+{
+	std::cout << "Genre: ";
+	char* genre = writeStr();
+
+	size_t moviesCount = 0;
+	Movie** movies = getMoviesBy(genre, *compareGenre, moviesCount);
+
+	for (size_t i = 0; i < moviesCount; i++)
+	{
+		std::cout << "\t";
+		std::cout << movies[i]->title << ", ";
+		std::cout << movies[i]->year << ", ";
+		std::cout << movies[i]->genre << ", ";
+		std::cout << movies[i]->director << ", ";
+		std::cout << movies[i]->cast << "\n";
+	}
+
+	std::cin.get();
+	returnMenu();
 }
