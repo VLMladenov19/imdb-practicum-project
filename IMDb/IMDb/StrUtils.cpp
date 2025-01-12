@@ -46,6 +46,25 @@ int strCmp(const char* str1, const char* str2)
 	return *str1 - *str2;
 }
 
+// Case insensitive compare
+int strCaseCmp(const char* str1, const char* str2)
+{
+	// Handle nullptr cases
+	if (!str1) return str2 ? -1 : 0;
+	if (!str2) return 1;
+
+	while (*str1 && *str2)
+	{
+		if (toLower(*str1) != toLower(*str2))
+		{
+			return toLower(*str1) - toLower(*str2);
+		}
+		str1++;
+		str2++;
+	}
+	return toLower(*str1) - toLower(*str2);
+}
+
 char** split(const char* str, const char delimiter, size_t& outSize)
 {
 	if (!str) return nullptr;
@@ -93,11 +112,20 @@ char** split(const char* str, const char delimiter, size_t& outSize)
 	return result;
 }
 
-short charToDigit(const char c)
+char toLower(const char sym)
 {
-	if ('0' <= c && c <= '9')
+	if ('A' <= sym && sym <= 'Z')
 	{
-		return c - '0';
+		return sym - 'A' + 'a';
+	}
+	return sym;
+}
+
+short charToDigit(const char sym)
+{
+	if ('0' <= sym && sym <= '9')
+	{
+		return sym - '0';
 	}
 	return -1;
 }

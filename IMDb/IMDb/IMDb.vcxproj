@@ -131,7 +131,6 @@
     <ClCompile Include="Menus.cpp" />
     <ClCompile Include="Movies.cpp" />
     <ClCompile Include="StrUtils.cpp" />
-    <ClCompile Include="Users.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h" />
@@ -139,7 +138,6 @@
     <ClInclude Include="Movies.h" />
     <ClInclude Include="Response.h" />
     <ClInclude Include="StrUtils.h" />
-    <ClInclude Include="Users.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

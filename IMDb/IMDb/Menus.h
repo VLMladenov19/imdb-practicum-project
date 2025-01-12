@@ -6,5 +6,5 @@ void adminMenu();
 void userMenu();
 
 void addMovieMenu();
-void searchByTitleMenu(void (*)());
-void searchByGenreMenu(void (*)());
+void searchByTitleMenu(void (*)() = *chooseRole);
+void searchByGenreMenu(void (*)() = *chooseRole);

@@ -37,6 +37,8 @@ Movie** getMoviesBy(const char* search,
 	bool (*searchFunc)(const char*, char**),
 	size_t& moviesCount)
 {
+	if (!search || !searchFunc) return nullptr;
+
 	std::ifstream file("files/movies.txt");
 
 	Movie** movies = new Movie*[STR_SIZE];
