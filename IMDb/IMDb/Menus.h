@@ -2,9 +2,12 @@
 
 void chooseRole();
 
+void waitForKeyPress();
+
 void adminMenu();
 void userMenu();
 
 void addMovieMenu();
 void searchByTitleMenu(void (*)() = *chooseRole);
 void searchByGenreMenu(void (*)() = *chooseRole);
+void listAllMenu(void (*)() = *chooseRole);

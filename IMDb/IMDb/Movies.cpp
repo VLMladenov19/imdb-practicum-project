@@ -36,8 +36,8 @@ bool compareGenre(const char* genre, char** movie)
 }
 
 Movie** getMoviesBy(const char* search,
-	bool (*searchFunc)(const char*, char**),
-	size_t& moviesCount)
+	size_t& moviesCount,
+	bool (*searchFunc)(const char*, char**))
 {
 	if (!search || !searchFunc) return nullptr;
 

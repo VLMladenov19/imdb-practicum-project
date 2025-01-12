@@ -29,6 +29,12 @@ void chooseRole()
 	}
 }
 
+void waitForKeyPress()
+{
+	std::cout << "\nPress any key to continue...\n";
+	std::cin.get();
+}
+
 void adminMenu()
 {
 	std::cout << "Select action:\n";
@@ -57,6 +63,7 @@ void adminMenu()
 		searchByGenreMenu(*adminMenu);
 		break;
 	case 4:
+		listAllMenu(*adminMenu);
 		break;
 	case 5:
 		break;
@@ -96,6 +103,11 @@ void addMovieMenu()
 
 	Response response = addMovie(Movie(title, year, genre, director, cast));
 
+	delete[] title;
+	delete[] genre;
+	delete[] director;
+	delete[] cast;
+
 	if (!response.isSuccessful)
 	{
 		std::cerr << response.message << "\n";
@@ -112,7 +124,8 @@ void searchByTitleMenu(void (*returnMenu)())
 	char* title = writeStr();
 
 	size_t moviesCount = 0;
-	Movie** movies = getMoviesBy(title, *compareTitle, moviesCount);
+	Movie** movies = getMoviesBy(title, moviesCount, *compareTitle);
+	delete[] title;
 
 	for (size_t i = 0; i < moviesCount; i++)
 	{
@@ -124,7 +137,7 @@ void searchByTitleMenu(void (*returnMenu)())
 		std::cout << movies[i]->cast << "\n";
 	}
 
-	std::cin.get();
+	waitForKeyPress();
 	returnMenu();
 }
 
@@ -134,7 +147,8 @@ void searchByGenreMenu(void (*returnMenu)())
 	char* genre = writeStr();
 
 	size_t moviesCount = 0;
-	Movie** movies = getMoviesBy(genre, *compareGenre, moviesCount);
+	Movie** movies = getMoviesBy(genre, moviesCount, *compareGenre);
+	delete[] genre;
 
 	for (size_t i = 0; i < moviesCount; i++)
 	{
@@ -146,6 +160,26 @@ void searchByGenreMenu(void (*returnMenu)())
 		std::cout << movies[i]->cast << "\n";
 	}
 
-	std::cin.get();
+	waitForKeyPress();
 	returnMenu();
+}
+
+void listAllMenu(void (*returnMenu)())
+{
+    size_t moviesCount = 0;
+    Movie** movies = getMoviesBy("", moviesCount);
+
+    for (size_t i = 0; i < moviesCount; i++)
+    {
+        std::cout << "\t";
+        std::cout << movies[i]->title << ", ";
+        std::cout << movies[i]->year << ", ";
+        std::cout << movies[i]->genre << ", ";
+        std::cout << movies[i]->director << ", ";
+        std::cout << movies[i]->cast << "\n";
+    }
+
+	std::cin.ignore();
+    waitForKeyPress();
+    returnMenu();
 }

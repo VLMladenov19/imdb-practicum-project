@@ -27,8 +27,10 @@ struct Movie
 };
 
 Response addMovie(const Movie);
-Movie** getMoviesBy(const char*, bool(*)(const char*, char**), size_t&);
 Movie** fixMatrixSize(Movie**, size_t);
 
 bool compareTitle(const char*, char**);
 bool compareGenre(const char*, char**);
+Movie** getMoviesBy(const char*,
+	size_t&,
+	bool(*)(const char*, char**) = [](const char*, char**) {return true; });
