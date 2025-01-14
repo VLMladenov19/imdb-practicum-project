@@ -9,6 +9,7 @@ void adminMenu();
 void userMenu();
 
 void addMovieMenu();
-void searchByTitleMenu(void (*)() = *chooseRole);
-void searchByGenreMenu(void (*)() = *chooseRole);
+void searchByMenu(const char*, 
+	bool(*)(const char*, char**), 
+	void (*)() = *chooseRole);
 void listAllMenu(void (*)() = *chooseRole);

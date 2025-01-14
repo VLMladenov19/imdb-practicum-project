@@ -78,10 +78,10 @@ void adminMenu()
 		addMovieMenu();
 		break;
 	case 2:
-		searchByTitleMenu(*adminMenu);
+		searchByMenu("Title", *compareTitle, *adminMenu);
 		break;
 	case 3:
-		searchByGenreMenu(*adminMenu);
+		searchByMenu("Genre", *compareGenre, *adminMenu);
 		break;
 	case 4:
 		listAllMenu(*adminMenu);
@@ -127,6 +127,8 @@ void addMovieMenu()
 	char** cast = new char* [castCount];
 	for (short i = 0; i < castCount; i++)
 	{
+		std::cout << i ? '\t' : '\0';
+
 		cast[i] = writeStr();
 
 		if (!strCmp(cast[i], "\n"))
@@ -154,44 +156,16 @@ void addMovieMenu()
 	adminMenu();
 }
 
-void searchByTitleMenu(void (*returnMenu)())
+void searchByMenu(const char* searchText, 
+	bool (*searchFunc)(const char*, char**),
+	void (*returnMenu)())
 {
-	std::cout << "Title: ";
-	char* title = writeStr();
+	std::cout << searchText << ": ";
+	char* search = writeStr();
 
 	size_t moviesCount = 0;
-	Movie** movies = getMoviesBy(title, moviesCount, *compareTitle);
-	delete[] title;
-
-	for (size_t i = 0; i < moviesCount; i++)
-	{
-		std::cout << "\t";
-		std::cout << movies[i]->title << ", ";
-		std::cout << movies[i]->year << ", ";
-		std::cout << movies[i]->genre << ", ";
-		std::cout << movies[i]->director;
-		if (!movies[i]->castCount)
-		{
-			std::cout << "\n";
-			break;
-		}
-		char* cast = join(movies[i]->cast, movies[i]->castCount, ", ");
-		std::cout << ", " << cast << "\n";
-		delete[] cast;
-	}
-
-	waitForKeyPress();
-	returnMenu();
-}
-
-void searchByGenreMenu(void (*returnMenu)())
-{
-	std::cout << "Genre: ";
-	char* genre = writeStr();
-
-	size_t moviesCount = 0;
-	Movie** movies = getMoviesBy(genre, moviesCount, *compareGenre);
-	delete[] genre;
+	Movie** movies = getMoviesBy(search, moviesCount, *searchFunc);
+	delete[] search;
 
 	for (size_t i = 0; i < moviesCount; i++)
 	{
