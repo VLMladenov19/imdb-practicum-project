@@ -1,3 +1,17 @@
+/**
+*
+* Solution to course project # 06 - IMDb
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2023/2024
+*
+* @author Vasil Mladenov
+* @idnumber 5MI0600475
+* @compiler VC
+* File with all printable menus
+*
+*/
+
 #include <iostream>
 
 #include "Menus.h"
@@ -11,8 +25,7 @@ void chooseRole()
 	std::cout << "\t1. Admin\n";
 	std::cout << "\t2. User\n";
 
-	short role;
-	std::cin >> role;
+	short role = chooseAction();
 
 	switch (role)
 	{
@@ -35,6 +48,15 @@ void waitForKeyPress()
 	std::cin.get();
 }
 
+short chooseAction()
+{
+	char* input = writeStr();
+	short action = strToNum(input);
+	delete[] input;
+
+	return action;
+}
+
 void adminMenu()
 {
 	std::cout << "Select action:\n";
@@ -48,8 +70,7 @@ void adminMenu()
 	std::cout << "\t8. Sort and filter by rating\n";
 	std::cout << "\t9. Exit\n";
 
-	short action;
-	std::cin >> action;
+	short action = chooseAction();
 
 	switch (action)
 	{
@@ -98,15 +119,30 @@ void addMovieMenu()
 	std::cout << "Director: ";
 	char* director = writeStr();
 
-	std::cout << "Cast: ";
-	char* cast = writeStr();
+	std::cout << "Cast Count: ";
+	short castCount;
+	std::cin >> castCount;
 
-	Response response = addMovie(Movie(title, year, genre, director, cast));
+	std::cout << "Cast: ";
+	char** cast = new char* [castCount];
+	for (short i = 0; i < castCount; i++)
+	{
+		cast[i] = writeStr();
+
+		if (!strCmp(cast[i], "\n"))
+		{
+			delete[] cast[i];
+			i--;
+			castCount--;
+		}
+	}
+
+	Response response = addMovie(Movie(title, year, genre, director, cast, castCount));
 
 	delete[] title;
 	delete[] genre;
 	delete[] director;
-	delete[] cast;
+	freeMemory(cast, castCount);
 
 	if (!response.isSuccessful)
 	{
@@ -133,8 +169,15 @@ void searchByTitleMenu(void (*returnMenu)())
 		std::cout << movies[i]->title << ", ";
 		std::cout << movies[i]->year << ", ";
 		std::cout << movies[i]->genre << ", ";
-		std::cout << movies[i]->director << ", ";
-		std::cout << movies[i]->cast << "\n";
+		std::cout << movies[i]->director;
+		if (!movies[i]->castCount)
+		{
+			std::cout << "\n";
+			break;
+		}
+		char* cast = join(movies[i]->cast, movies[i]->castCount, ", ");
+		std::cout << ", " << cast << "\n";
+		delete[] cast;
 	}
 
 	waitForKeyPress();
@@ -156,8 +199,10 @@ void searchByGenreMenu(void (*returnMenu)())
 		std::cout << movies[i]->title << ", ";
 		std::cout << movies[i]->year << ", ";
 		std::cout << movies[i]->genre << ", ";
-		std::cout << movies[i]->director << ", ";
-		std::cout << movies[i]->cast << "\n";
+		std::cout << movies[i]->director;
+		char* cast = join(movies[i]->cast, movies[i]->castCount, ", ");
+		strCmp(cast, "") ? std::cout << ", " << cast << "\n" : std::cout << "\n";
+		delete[] cast;
 	}
 
 	waitForKeyPress();
@@ -169,17 +214,18 @@ void listAllMenu(void (*returnMenu)())
     size_t moviesCount = 0;
     Movie** movies = getMoviesBy("", moviesCount);
 
-    for (size_t i = 0; i < moviesCount; i++)
-    {
-        std::cout << "\t";
-        std::cout << movies[i]->title << ", ";
-        std::cout << movies[i]->year << ", ";
-        std::cout << movies[i]->genre << ", ";
-        std::cout << movies[i]->director << ", ";
-        std::cout << movies[i]->cast << "\n";
-    }
+	for (size_t i = 0; i < moviesCount; i++)
+	{
+		std::cout << "\t";
+		std::cout << movies[i]->title << ", ";
+		std::cout << movies[i]->year << ", ";
+		std::cout << movies[i]->genre << ", ";
+		std::cout << movies[i]->director;
+		char* cast = join(movies[i]->cast, movies[i]->castCount, ", ");
+		strCmp(cast, "") ? std::cout << ", " << cast << "\n" : std::cout << "\n";
+		delete[] cast;
+	}
 
-	std::cin.ignore();
     waitForKeyPress();
     returnMenu();
 }

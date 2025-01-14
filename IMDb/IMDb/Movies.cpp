@@ -15,8 +15,13 @@ Response addMovie(const Movie movie)
 		return Response(false, "Error: File not found");
 	}
 
-	file << movie.title << "," << movie.year << "," << movie.genre << "," <<
-		movie.director << "," << movie.cast << "\n";
+	file << movie.title << "#" << movie.year << "#" << movie.genre << "#" <<
+		movie.director << "#";
+	for (size_t i = 0; i < movie.castCount; i++)
+	{
+		file << movie.cast[i] << "#";
+	}
+	file << movie.castCount << "\n";
 
 	file.close();
 	return Response(true, "Success");
@@ -49,7 +54,14 @@ Movie** getMoviesBy(const char* search,
 	while (file.getline(line, STR_SIZE))
 	{
 		size_t infoCount = 0;
-		char** movieInfo = split(line, ',', infoCount);
+		char** movieInfo = split(line, '#', infoCount);
+		size_t castCount = strToNum(movieInfo[infoCount - 1]);
+		char** cast = new char* [castCount];
+		for (size_t i = 0; i < castCount; i++)
+		{
+			cast[i] = new char[strLen(movieInfo[CAST_INDEX + i]) + 1];
+			strCopy(cast[i], movieInfo[CAST_INDEX + i]);
+		}
 
 		if (!searchFunc(search, movieInfo))
 		{
@@ -61,9 +73,11 @@ Movie** getMoviesBy(const char* search,
 			strToNum(movieInfo[YEAR_INDEX]),
 			movieInfo[GENRE_INDEX], 
 			movieInfo[DIRECTORT_INDEX],
-			movieInfo[CAST_INDEX]);
+			cast,
+			castCount);
 		movies[moviesCount++] = movie;
 		freeMemory(movieInfo, infoCount);
+		freeMemory(cast, castCount);
 	}
 
 	movies = fixMatrixSize(movies, moviesCount);
@@ -78,11 +92,13 @@ Movie** fixMatrixSize(Movie** movies, size_t count)
 	Movie** fixed = new Movie*[count];
 	for (size_t i = 0; i < count; i++)
 	{
-		Movie* temp = new Movie(movies[i]->title,
+		Movie* temp = new Movie(
+			movies[i]->title,
 			movies[i]->year,
 			movies[i]->genre,
 			movies[i]->director,
-			movies[i]->cast);
+			movies[i]->cast,
+			movies[i]->castCount);
 		fixed[i] = temp;
 		delete[] movies[i];
 	}

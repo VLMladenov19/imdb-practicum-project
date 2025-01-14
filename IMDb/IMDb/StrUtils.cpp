@@ -112,6 +112,31 @@ char** split(const char* str, const char delimiter, size_t& outSize)
 	return result;
 }
 
+char* join(char** arr, const size_t size, const char* joinStr)
+{
+	if (!arr) return nullptr;
+
+	if (!size)
+	{
+		char* emptyStr = new char[1];
+		strCopy(emptyStr, "");
+		return emptyStr;
+	}
+
+	char* str = new char[STR_SIZE];
+	char* firstIndex = str;
+	for (size_t i = 0; i < size - 1; i++)
+	{
+		strCopy(str, arr[i]);
+		str += strLen(arr[i]);
+		strCopy(str, joinStr);
+		str += strLen(joinStr);
+	}
+	strCopy(str, arr[size - 1]);
+
+	return fixSize(firstIndex);
+}
+
 char toLower(const char sym)
 {
 	if ('A' <= sym && sym <= 'Z')
@@ -147,7 +172,7 @@ int strToNum(const char* str)
 	return num;
 }
 
-char* fixSize(char* str)
+char* fixSize(const char* str)
 {
 	char* fixed = new char[strLen(str) + 1];
 	strCopy(fixed, str);
@@ -169,13 +194,13 @@ char* writeStr()
 	return fixSize(str);
 }
 
-void freeMemory(char** str, size_t size)
+void freeMemory(char** strArr, size_t size)
 {
-	if (!str) return;
+	if (!strArr) return;
 
 	for (size_t i = 0; i < size; i++)
 	{
-		delete[] str[i];
+		delete[] strArr[i];
 	}
-	delete[] str;
+	delete[] strArr;
 }

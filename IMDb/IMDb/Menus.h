@@ -3,6 +3,7 @@
 void chooseRole();
 
 void waitForKeyPress();
+short chooseAction();
 
 void adminMenu();
 void userMenu();
