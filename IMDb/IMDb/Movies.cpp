@@ -29,15 +29,17 @@ Response addMovie(const Movie movie)
 
 bool compareTitle(const char* title, char** movie)
 {
-	// if title is shorter or equal return true
-	return strCaseCmp(title, movie[TITLE_INDEX]) <= 0 && 
-		toLower(title[0]) == toLower(movie[TITLE_INDEX][0]);
+	//// if title is shorter or equal return true
+	//return strCaseCmp(title, movie[TITLE_INDEX]) <= 0 && 
+	//	toLower(title[0]) == toLower(movie[TITLE_INDEX][0]);
+	return strCaseContains(movie[TITLE_INDEX], title);
 }
 
 bool compareGenre(const char* genre, char** movie)
 {
-	return strCaseCmp(genre, movie[GENRE_INDEX]) <= 0 && 
-		toLower(genre[0]) == toLower(movie[GENRE_INDEX][0]);
+	//return strCaseCmp(genre, movie[GENRE_INDEX]) <= 0 && 
+	//	toLower(genre[0]) == toLower(movie[GENRE_INDEX][0]);
+	return strCaseContains(movie[GENRE_INDEX], genre);
 }
 
 Movie** getMoviesBy(const char* search,

@@ -15,6 +15,41 @@ size_t strLen(const char* str)
 	return len;
 }
 
+char toLower(const char sym)
+{
+	if ('A' <= sym && sym <= 'Z')
+	{
+		return sym - 'A' + 'a';
+	}
+	return sym;
+}
+
+short charToDigit(const char sym)
+{
+	if ('0' <= sym && sym <= '9')
+	{
+		return sym - '0';
+	}
+	return -1;
+}
+
+int strToNum(const char* str)
+{
+	if (!str) return 0;
+
+	size_t length = strLen(str);
+	int num = 0;
+	for (size_t i = 0; i < length; i++)
+	{
+		short digit = charToDigit(str[i]);
+		if (digit == -1)
+			return num;
+		num = num * 10 + digit;
+	}
+
+	return num;
+}
+
 void strCopy(char* dest, const char* src)
 {
 	if (!dest || !src) return;
@@ -137,39 +172,43 @@ char* join(char** arr, const size_t size, const char* joinStr)
 	return fixSize(firstIndex);
 }
 
-char toLower(const char sym)
+bool strCaseContains(const char* str, const char* subStr)
 {
-	if ('A' <= sym && sym <= 'Z')
+	if (!str || !subStr) return false;
+
+	if (!*subStr)
+		return true;
+
+	while (*str)
 	{
-		return sym - 'A' + 'a';
+		const char* strPtr = str;
+		const char* subStrPtr = subStr;
+
+		while (*strPtr && *subStrPtr && toLower(*strPtr) == toLower(*subStrPtr))
+		{
+			strPtr++;
+			subStrPtr++;
+		}
+
+		if (!*subStrPtr)
+			return true;
+
+		str++;
 	}
-	return sym;
+	return false;
 }
 
-short charToDigit(const char sym)
+char* writeStr()
 {
-	if ('0' <= sym && sym <= '9')
+	char* str = new char[STR_SIZE + 1];
+
+	if (std::cin.peek() == '\n')
 	{
-		return sym - '0';
+		std::cin.ignore();
 	}
-	return -1;
-}
+	std::cin.getline(str, STR_SIZE);
 
-int strToNum(const char* str)
-{
-	if (!str) return 0;
-
-	size_t length = strLen(str);
-	int num = 0;
-	for (size_t i = 0; i < length; i++)
-	{
-		short digit = charToDigit(str[i]);
-		if (digit == -1)
-			return num;
-		num = num * 10 + digit;
-	}
-
-	return num;
+	return fixSize(str);
 }
 
 char* fixSize(const char* str)
@@ -179,19 +218,6 @@ char* fixSize(const char* str)
 	
 	delete[] str;
 	return fixed;
-}
-
-char* writeStr()
-{
-	char* str = new char[STR_SIZE + 1];
-	
-	if (std::cin.peek() == '\n')
-	{
-		std::cin.ignore();
-	}
-	std::cin.getline(str, STR_SIZE);
-
-	return fixSize(str);
 }
 
 void freeMemory(char** strArr, size_t size)
