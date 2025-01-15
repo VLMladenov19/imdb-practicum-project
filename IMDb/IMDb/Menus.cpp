@@ -80,7 +80,7 @@ void adminMenu()
         std::cout << "\t" << ADMIN_LIST_ALL_ACTION << ". List all\n";
         std::cout << "\t" << ADMIN_UPDATE_MOVIE_ACTION << ". Update movie\n";
         std::cout << "\t" << ADMIN_REMOVE_MOVIE_ACTION << ". Remove movie\n";
-        std::cout << "\t" << ADMIN_RATE_MOVIE_ACTION << ". Review movie\n";
+        std::cout << "\t" << ADMIN_RATE_MOVIE_ACTION << ". Rate movie\n";
         std::cout << "\t" << ADMIN_SORT_FILTER_ACTION << ". Sort and filter by rating\n";
         std::cout << "\t" << EXIT_ACTION << ". Exit\n\n";
 
@@ -108,6 +108,7 @@ void adminMenu()
 			removeMovieMenu();
 			break;
 		case ADMIN_RATE_MOVIE_ACTION:
+			rateMovieMenu();
 			break;
 		case ADMIN_SORT_FILTER_ACTION:
 			break;
@@ -242,7 +243,8 @@ size_t chooseMovieMenu()
 	{
 		std::cout << "\t";
 		std::cout << i + 1 << ". ";
-		std::cout << movies[i]->title << "\n";
+		std::cout << movies[i]->title << ", ";
+		std::cout << movies[i]->rating << "\n";
 	}
 	std::cout << "\t" << EXIT_ACTION << ". Cancel\n\n";
 
@@ -347,6 +349,32 @@ void removeMovieMenu()
 	}
 
 	Response response = removeMovie(movieIndex);
+
+	if (!response.isSuccessful)
+	{
+		std::cerr << response.message << "\n";
+		waitForKeyPress();
+	}
+}
+
+void rateMovieMenu()
+{
+	system("cls");
+
+	std::cout << "Rate Movie\n\n";
+	size_t movieIndex = chooseMovieMenu() - 1;
+
+	if (movieIndex == EXIT_ACTION - 1)
+	{
+		return;
+	}
+
+	std::cout << "Rating(0-10): ";
+	char* ratingStr = writeStr();
+	float ratingFloat = strToFloat(ratingStr);
+	delete[] ratingStr;
+
+	Response response = addRating(movieIndex, ratingFloat);
 
 	if (!response.isSuccessful)
 	{

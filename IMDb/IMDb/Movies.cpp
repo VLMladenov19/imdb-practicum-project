@@ -113,30 +113,25 @@ Movie* getMovie(const size_t movieIndex)
 	);
 }
 
-float calculateNewRating(const Movie movie, const float newRating)
+float calculateNewRating(const Movie* movie, const float newRating)
 {
-	float floatRating = (movie.rating * movie.ratingsCount + newRating) / (movie.ratingsCount + 1);
+	float floatRating = (movie->rating * movie->ratingsCount + newRating) 
+		/ (movie->ratingsCount + 1);
 	int intRating = floatRating * 100;
 	return intRating / 100.0f;
 }
 
 bool compareTitle(const char* title, char** movie)
 {
-	//// if title is shorter or equal return true
-	//return strCaseCmp(title, movie[TITLE_INDEX]) <= 0 && 
-	//	toLower(title[0]) == toLower(movie[TITLE_INDEX][0]);
 	return strCaseContains(movie[TITLE_INDEX], title);
 }
 
 bool compareGenre(const char* genre, char** movie)
 {
-	//return strCaseCmp(genre, movie[GENRE_INDEX]) <= 0 && 
-	//	toLower(genre[0]) == toLower(movie[GENRE_INDEX][0]);
 	return strCaseContains(movie[GENRE_INDEX], genre);
 }
 
-Movie** getMoviesBy(const char* search,
-	size_t& moviesCount,
+Movie** getMoviesBy(const char* search, size_t& moviesCount,
 	bool (*searchFunc)(const char*, char**))
 {
 	if (!search || !searchFunc) return nullptr;
@@ -181,6 +176,29 @@ Movie** getMoviesBy(const char* search,
 	movies = fixMatrixSize(movies, moviesCount);
 
 	return movies;
+}
+
+Response addRating(const size_t movieIndex, const float newRating)
+{
+	Movie* movie = getMovie(movieIndex);
+
+	if (!movie)
+	{
+		return Response(false, "Error: Invalid movie index.");
+	}
+
+	movie->rating = calculateNewRating(movie, newRating);
+	movie->ratingsCount++;
+
+	Response response = updateMovie(movieIndex, movie);
+
+	freeMovie(movie);
+	if (!response.isSuccessful)
+	{
+		return response;
+	}
+
+	return Response(true, "Movie rated successfully.");
 }
 
 Movie** fixMatrixSize(Movie** movies, size_t count)

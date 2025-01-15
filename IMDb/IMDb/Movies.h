@@ -50,7 +50,9 @@ bool compareTitle(const char*, char**);
 bool compareGenre(const char*, char**);
 Movie** getMoviesBy(const char*,
 	size_t&,
-	bool(*)(const char*, char**) = [](const char*, char**) {return true; });
+	bool(*)(const char*, char**) = [](const char*, char**) 
+	{return true;});
+Response addRating(const size_t, const float);
 
 Movie** fixMatrixSize(Movie**, size_t);
 void freeMovie(Movie*);
