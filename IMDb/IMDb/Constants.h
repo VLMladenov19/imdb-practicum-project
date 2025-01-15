@@ -2,6 +2,8 @@
 
 constexpr size_t STR_SIZE = 1024;
 
+constexpr char MOVIES_FILE[] = "movies.txt";
+
 // Menu actions values
 constexpr short EXIT_ACTION = 0;
 
@@ -37,9 +39,11 @@ constexpr short CAST_COUNT_INDEX = 6;
 constexpr short CAST_INDEX = 7; // Index to the first cast member (if exists)
 
 // Movies info max lengths/value
-constexpr short TITLE_MAX = 40;
+constexpr short TITLE_MAX_LENGTH = 40;
+constexpr short YEAR_MIN = 1850;
 constexpr short YEAR_MAX = 2030;
-constexpr short GENRE_MAX = 25;
+constexpr short GENRE_MAX_LENGTH = 25;
+constexpr short RATING_MIN = 0;
 constexpr short RATING_MAX = 10;
-constexpr short DIRECTOR_MAX = 25;
-constexpr short CAST_MAX = 25;
+constexpr short DIRECTOR_MAX_LENGTH = 25;
+constexpr short CAST_MAX_LENGTH = 25;

@@ -40,11 +40,12 @@ void chooseRole()
 	while (true)
 	{
 		system("cls");
-		std::cout << "Choose role:\n";
+		std::cout << "Choose role\n";
 		std::cout << "\t" << ADMIN_ACTION << ".Admin\n";
 		std::cout << "\t" << USER_ACTION << ".User\n";
-		std::cout << "\t" << EXIT_ACTION << ".Exit\n";
+		std::cout << "\t" << EXIT_ACTION << ".Exit\n\n";
 
+		std::cout << "Select role: ";
 		role = chooseAction();
 
 		switch (role)
@@ -73,7 +74,6 @@ void adminMenu()
 		system("cls");
 
 		std::cout << "Admin Menu\n\n";
-		std::cout << "Select action:\n";
         std::cout << "\t" << ADMIN_ADD_MOVIE_ACTION << ". Add movie\n";
         std::cout << "\t" << ADMIN_SEARCH_BY_TITLE_ACTION << ". Search by title\n";
         std::cout << "\t" << ADMIN_SEARCH_BY_GENRE_ACTION << ". Search by genre\n";
@@ -82,8 +82,9 @@ void adminMenu()
         std::cout << "\t" << ADMIN_REMOVE_MOVIE_ACTION << ". Remove movie\n";
         std::cout << "\t" << ADMIN_RATE_MOVIE_ACTION << ". Review movie\n";
         std::cout << "\t" << ADMIN_SORT_FILTER_ACTION << ". Sort and filter by rating\n";
-        std::cout << "\t" << EXIT_ACTION << ". Exit\n";
+        std::cout << "\t" << EXIT_ACTION << ". Exit\n\n";
 
+		std::cout << "Select action: ";
 		short action = chooseAction();
 
 		switch (action)
@@ -101,6 +102,7 @@ void adminMenu()
 			listAllMenu();
 			break;
 		case ADMIN_UPDATE_MOVIE_ACTION:
+			updateMovieMenu();
 			break;
 		case ADMIN_REMOVE_MOVIE_ACTION:
 			removeMovieMenu();
@@ -114,6 +116,7 @@ void adminMenu()
 			break;
 		default:
 			std::cout << "Invalid value for action\n";
+			waitForKeyPress();
 			break;
 		}
 	}
@@ -142,19 +145,18 @@ void addMovieMenu()
 	short castCount;
 	std::cin >> castCount;
 
-	std::cout << "Cast: ";
 	char** cast = new char* [castCount];
 	for (short i = 0; i < castCount; i++)
 	{
-		std::cout << (i ? '\t' : '\0');
+		std::cout << "Cast Member "<< i + 1 << ": ";
 
 		cast[i] = writeStr();
 
-		if (!strCmp(cast[i], "\n"))
+		if (!strCmp(cast[i], ""))
 		{
 			delete[] cast[i];
 			i--;
-			castCount--;
+			castCount;
 		}
 	}
 
@@ -186,7 +188,11 @@ void printMovies(Movie** movies, const size_t count)
 		std::cout << movies[i]->rating << ", ";
 		std::cout << movies[i]->director;
 		char* cast = join(movies[i]->cast, movies[i]->castCount, ", ");
-		strCmp(cast, "") ? std::cout << ", " << cast << "\n" : std::cout << "\n";
+		if(strCmp(cast, ""))
+		{
+			std::cout << ", " << cast;
+		}
+		std::cout << "\n";
 		delete[] cast;
 	}
 }
@@ -232,13 +238,13 @@ size_t chooseMovieMenu()
 
 	if (!movies) return -1;
 
-	std::cout << "\t0. Cancel\n";
 	for (size_t i = 0; i < moviesCount; i++)
 	{
 		std::cout << "\t";
 		std::cout << i + 1 << ". ";
 		std::cout << movies[i]->title << "\n";
 	}
+	std::cout << "\t" << EXIT_ACTION << ". Cancel\n\n";
 
 	std::cout << "Select movie by index: ";
 	char* movieIndexStr = writeStr();
@@ -256,7 +262,76 @@ size_t chooseMovieMenu()
 	}
 
 	freeMovieArray(movies, moviesCount);
-	return movieIndex - 1;
+	return movieIndex;
+}
+
+void updateMovieMenu()
+{
+	system("cls");
+
+	std::cout << "Update Movie\n\n";
+	// Minus 1 to match index of movies in file
+	size_t movieIndex = chooseMovieMenu() - 1;
+
+	if (movieIndex == EXIT_ACTION - 1)
+	{
+		return;
+	}
+
+	Movie* movie = getMovie(movieIndex);
+
+	std::cout << "Current Title: " << movie->title << "\n";
+	std::cout << "New Title: ";
+	char* newTitle = writeStr();
+
+	std::cout << "Current Year: " << movie->year << "\n";
+	std::cout << "New Year: ";
+	unsigned newYear;
+	std::cin >> newYear;
+
+	std::cout << "Current Genre: " << movie->genre << "\n";
+	std::cout << "New Genre: ";
+	char* newGenre = writeStr();
+
+	std::cout << "Current Director: " << movie->director << "\n";
+	std::cout << "New Director: ";
+	char* newDirector = writeStr();
+
+	std::cout << "Current Cast Count: " << movie->castCount << "\n";
+	std::cout << "New Cast Count: ";
+	size_t newCastCount;
+	std::cin >> newCastCount;
+
+	char** newCast = new char*[newCastCount];
+	for (size_t i = 0; i < newCastCount; i++)
+	{
+		std::cout << "New Cast Member " << i + 1 << ": ";
+		newCast[i] = writeStr();
+	}
+
+	Movie* newMovie = new Movie(
+		newTitle, 
+		newYear,
+		newGenre,
+		movie->ratingsCount,
+		movie->rating, 
+		newDirector, 
+		newCastCount, 
+		newCast);
+	Response response = updateMovie(movieIndex, newMovie);
+
+	delete[] newTitle;
+	delete[] newGenre;
+	delete[] newDirector;
+	freeStrArray(newCast, newCastCount);
+	freeMovie(movie);
+	freeMovie(newMovie);
+
+	if (!response.isSuccessful)
+	{
+		std::cerr << response.message << "\n";
+		waitForKeyPress();
+	}
 }
 
 void removeMovieMenu()
@@ -264,9 +339,9 @@ void removeMovieMenu()
 	system("cls");
 
 	std::cout << "Remove Movie\n\n";
-	size_t movieIndex = chooseMovieMenu();
+	size_t movieIndex = chooseMovieMenu() - 1;
 
-	if (movieIndex == 0)
+	if (movieIndex == EXIT_ACTION - 1)
 	{
 		return;
 	}

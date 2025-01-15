@@ -18,4 +18,5 @@ void searchByMenu(const char*,
 void listAllMenu();
 
 size_t chooseMovieMenu();
+void updateMovieMenu();
 void removeMovieMenu();

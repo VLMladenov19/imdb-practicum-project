@@ -15,6 +15,7 @@ int strCaseCmp(const char* str1, const char* str2);
 char** split(const char* str, const char delimiter, size_t& outSize);
 char* join(char** arr, const size_t size, const char* joinStr);
 bool strCaseContains(const char* str, const char* subStr);
+void removeSymbol(char* str, const char sym);
 
 char* writeStr();
 char* fixSize(const char* str);

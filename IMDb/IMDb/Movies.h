@@ -41,8 +41,11 @@ struct Movie
 Response addMovie(const Movie*);
 Response removeAllMovies();
 Response removeMovie(const size_t);
+Response updateMovie(const size_t, const Movie*);
+Movie* getMovie(const size_t);
 
 float calculateNewRating(const Movie, const float);
+
 bool compareTitle(const char*, char**);
 bool compareGenre(const char*, char**);
 Movie** getMoviesBy(const char*,

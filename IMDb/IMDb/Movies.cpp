@@ -7,8 +7,7 @@
 
 Response addMovie(const Movie* movie)
 {
-	// Directory has to be created for code to work
-	std::ofstream file("files/movies.txt", std::ios::app);
+	std::ofstream file(MOVIES_FILE, std::ios::app);
 
 	if (!file.is_open())
 	{
@@ -30,7 +29,7 @@ Response addMovie(const Movie* movie)
 
 Response removeAllMovies()
 {
-	std::ofstream file("files/movies.txt", std::ios::out | std::ios::trunc);
+	std::ofstream file(MOVIES_FILE, std::ios::out | std::ios::trunc);
 
 	if (!file.is_open())
 	{
@@ -73,6 +72,47 @@ Response removeMovie(const size_t movieIndex)
 	return Response(true, "Movie removed successfully.");
 }
 
+Response updateMovie(const size_t movieIndex, const Movie* newMovie)
+{
+	if (!newMovie) return Response(false, "Error: Invalid movie for updating.");
+
+	Response removeMovieResponse = removeMovie(movieIndex);
+	if (!removeMovieResponse.isSuccessful)
+	{
+		return removeMovieResponse;
+	}
+
+	Response addNewMovieResponse = addMovie(newMovie);
+	if (!addNewMovieResponse.isSuccessful)
+	{
+		return addNewMovieResponse;
+	}
+
+	return Response(true, "Movie successfully updated.");
+}
+
+Movie* getMovie(const size_t movieIndex)
+{
+	size_t moviesCount = 0;
+	Movie** movies = getMoviesBy("", moviesCount);
+
+	if (movieIndex < 0 || movieIndex >= moviesCount)
+	{
+		return nullptr;
+	}
+
+	return new Movie(
+		movies[movieIndex]->title,
+		movies[movieIndex]->year,
+		movies[movieIndex]->genre,
+		movies[movieIndex]->ratingsCount,
+		movies[movieIndex]->rating,
+		movies[movieIndex]->director,
+		movies[movieIndex]->castCount,
+		movies[movieIndex]->cast
+	);
+}
+
 float calculateNewRating(const Movie movie, const float newRating)
 {
 	float floatRating = (movie.rating * movie.ratingsCount + newRating) / (movie.ratingsCount + 1);
@@ -101,7 +141,7 @@ Movie** getMoviesBy(const char* search,
 {
 	if (!search || !searchFunc) return nullptr;
 
-	std::ifstream file("files/movies.txt");
+	std::ifstream file(MOVIES_FILE);
 
 	Movie** movies = new Movie*[STR_SIZE];
 	moviesCount = 0;
