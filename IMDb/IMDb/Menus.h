@@ -16,3 +16,6 @@ void printMovies(Movie**, const size_t);
 void searchByMenu(const char*, 
 	bool(*)(const char*, char**));
 void listAllMenu();
+
+size_t chooseMovieMenu();
+void removeMovieMenu();

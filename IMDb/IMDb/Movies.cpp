@@ -5,7 +5,7 @@
 #include "Response.h"
 #include "Constants.h"
 
-Response addMovie(const Movie movie)
+Response addMovie(const Movie* movie)
 {
 	// Directory has to be created for code to work
 	std::ofstream file("files/movies.txt", std::ios::app);
@@ -15,17 +15,62 @@ Response addMovie(const Movie movie)
 		return Response(false, "Error: File not found");
 	}
 
-	file << movie.title << "#" << movie.year << "#" << movie.genre << "#" << 
-		movie.ratingsCount << "#" << movie.rating << "#" <<
-		movie.director << "#" << movie.castCount;
-	for (size_t i = 0; i < movie.castCount; i++)
+    file << movie->title << "#" << movie->year << "#" << movie->genre << "#" << 
+		movie->ratingsCount << "#" << movie->rating << "#" << 
+		movie->director << "#" << movie->castCount;
+	for (size_t i = 0; i < movie->castCount; i++)
 	{
-		file << "#" << movie.cast[i];
+		file << "#" << movie->cast[i];
 	}
 	file << "\n";
 
 	file.close();
-	return Response(true, "Success");
+	return Response(true, "Movie added successfully.");
+}
+
+Response removeAllMovies()
+{
+	std::ofstream file("files/movies.txt", std::ios::out | std::ios::trunc);
+
+	if (!file.is_open())
+	{
+		return Response(false, "Error: File not found. Movies not removed.");
+	}
+
+	file.close();
+	return Response(true, "All movies removed successfully.");
+}
+
+Response removeMovie(const size_t movieIndex)
+{
+	size_t moviesCount = 0;
+	Movie** movies = getMoviesBy("", moviesCount);
+
+	Response removeMoviesResponse = removeAllMovies();
+
+	if (!removeMoviesResponse.isSuccessful)
+	{
+		freeMovieArray(movies, moviesCount);
+		return removeMoviesResponse;
+	}
+
+	Response addMovieResponse(true, "Success");
+	for (int i = 0; i < moviesCount; i++)
+	{
+		if (i != movieIndex)
+		{
+			addMovieResponse = addMovie(movies[i]);
+
+			if (!addMovieResponse.isSuccessful)
+			{
+				freeMovieArray(movies, moviesCount);
+				return addMovieResponse;
+			}
+		}
+	}
+
+	freeMovieArray(movies, moviesCount);
+	return Response(true, "Movie removed successfully.");
 }
 
 float calculateNewRating(const Movie movie, const float newRating)
