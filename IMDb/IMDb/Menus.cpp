@@ -19,32 +19,9 @@
 #include "StrUtils.h"
 #include "Movies.h"
 
-void chooseRole()
-{
-	std::cout << "Choose role:\n";
-	std::cout << "\t1. Admin\n";
-	std::cout << "\t2. User\n";
-
-	short role = chooseAction();
-
-	switch (role)
-	{
-	case ADMIN_VALUE:
-		adminMenu();
-		break;
-	case USER_VALUE:
-		//userMenu();
-		break;
-	default:
-		std::cout << "Invalid value for role\n";
-		chooseRole();
-		break;
-	}
-}
-
 void waitForKeyPress()
 {
-	std::cout << "\nPress any key to continue...\n";
+	std::cout << "\nPress enter to continue...\n";
 	std::cin.get();
 }
 
@@ -57,50 +34,79 @@ short chooseAction()
 	return action;
 }
 
+void chooseRole()
+{
+	short role = -1;
+	while (true)
+	{
+		std::cout << "Choose role:\n";
+		std::cout << "\t1. Admin\n";
+		std::cout << "\t2. User\n";
+
+		role = chooseAction();
+
+		switch (role)
+		{
+		case ADMIN_VALUE:
+			adminMenu();
+			return;
+		case USER_VALUE:
+			//userMenu();
+			return;
+		default:
+			std::cout << "Invalid value for role\n";
+			break;
+		}
+	}
+}
+
 void adminMenu()
 {
-	std::cout << "Select action:\n";
-	std::cout << "\t1. Add movie\n";
-	std::cout << "\t2. Search by title\n";
-	std::cout << "\t3. Search by genre\n";
-	std::cout << "\t4. List all\n";
-	std::cout << "\t5. Update movie\n";
-	std::cout << "\t6. Remove movie\n";
-	std::cout << "\t7. Review movie\n";
-	std::cout << "\t8. Sort and filter by rating\n";
-	std::cout << "\t9. Exit\n";
-
-	short action = chooseAction();
-
-	switch (action)
+	short action = -1;
+	while(true)
 	{
-	case 1:
-		addMovieMenu();
-		break;
-	case 2:
-		searchByMenu("Title", *compareTitle, *adminMenu);
-		break;
-	case 3:
-		searchByMenu("Genre", *compareGenre, *adminMenu);
-		break;
-	case 4:
-		listAllMenu(*adminMenu);
-		break;
-	case 5:
-		break;
-	case 6:
-		break;
-	case 7:
-		break;
-	case 8:
-		break;
-	case 9:
-		exit(0);
-		break;
-	default:
-		std::cout << "Invalid value for action\n";
-		adminMenu();
-		break;
+		std::cout << "Select action:\n";
+		std::cout << "\t1. Add movie\n";
+		std::cout << "\t2. Search by title\n";
+		std::cout << "\t3. Search by genre\n";
+		std::cout << "\t4. List all\n";
+		std::cout << "\t5. Update movie\n";
+		std::cout << "\t6. Remove movie\n";
+		std::cout << "\t7. Review movie\n";
+		std::cout << "\t8. Sort and filter by rating\n";
+		std::cout << "\t9. Exit\n";
+
+		short action = chooseAction();
+
+		switch (action)
+		{
+		case 1:
+			addMovieMenu();
+			break;
+		case 2:
+			searchByMenu("Title", *compareTitle);
+			break;
+		case 3:
+			searchByMenu("Genre", *compareGenre);
+			break;
+		case 4:
+			listAllMenu();
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			break;
+		case 9:
+			exit(0);
+			break;
+		default:
+			std::cout << "Invalid value for action\n";
+			break;
+		}
 	}
 }
 
@@ -127,7 +133,7 @@ void addMovieMenu()
 	char** cast = new char* [castCount];
 	for (short i = 0; i < castCount; i++)
 	{
-		std::cout << i ? '\t' : '\0';
+		std::cout << (i ? '\t' : '\0');
 
 		cast[i] = writeStr();
 
@@ -139,26 +145,40 @@ void addMovieMenu()
 		}
 	}
 
-	Response response = addMovie(Movie(title, year, genre, director, cast, castCount));
+	Response response = addMovie(Movie(title, year, genre, 1, 5.0f, director, castCount, cast));
 
 	delete[] title;
 	delete[] genre;
 	delete[] director;
-	freeMemory(cast, castCount);
+	freeStrArray(cast, castCount);
 
 	if (!response.isSuccessful)
 	{
-		std::cerr << response.message << "\n";
-		addMovieMenu();
-		return;
+		std::cerr << "\n" << response.message << "\n";
+		waitForKeyPress();
 	}
+}
 
-	adminMenu();
+void printMovies(Movie** movies, const size_t count)
+{
+	if (!movies) return;
+
+	for (size_t i = 0; i < count; i++)
+	{
+		std::cout << "\t";
+		std::cout << movies[i]->title << ", ";
+		std::cout << movies[i]->year << ", ";
+		std::cout << movies[i]->genre << ", ";
+		std::cout << movies[i]->rating << ", ";
+		std::cout << movies[i]->director;
+		char* cast = join(movies[i]->cast, movies[i]->castCount, ", ");
+		strCmp(cast, "") ? std::cout << ", " << cast << "\n" : std::cout << "\n";
+		delete[] cast;
+	}
 }
 
 void searchByMenu(const char* searchText, 
-	bool (*searchFunc)(const char*, char**),
-	void (*returnMenu)())
+	bool (*searchFunc)(const char*, char**))
 {
 	std::cout << searchText << ": ";
 	char* search = writeStr();
@@ -167,39 +187,19 @@ void searchByMenu(const char* searchText,
 	Movie** movies = getMoviesBy(search, moviesCount, *searchFunc);
 	delete[] search;
 
-	for (size_t i = 0; i < moviesCount; i++)
-	{
-		std::cout << "\t";
-		std::cout << movies[i]->title << ", ";
-		std::cout << movies[i]->year << ", ";
-		std::cout << movies[i]->genre << ", ";
-		std::cout << movies[i]->director;
-		char* cast = join(movies[i]->cast, movies[i]->castCount, ", ");
-		strCmp(cast, "") ? std::cout << ", " << cast << "\n" : std::cout << "\n";
-		delete[] cast;
-	}
+	printMovies(movies, moviesCount);
 
+	freeMovieArray(movies, moviesCount);
 	waitForKeyPress();
-	returnMenu();
 }
 
-void listAllMenu(void (*returnMenu)())
+void listAllMenu()
 {
     size_t moviesCount = 0;
     Movie** movies = getMoviesBy("", moviesCount);
 
-	for (size_t i = 0; i < moviesCount; i++)
-	{
-		std::cout << "\t";
-		std::cout << movies[i]->title << ", ";
-		std::cout << movies[i]->year << ", ";
-		std::cout << movies[i]->genre << ", ";
-		std::cout << movies[i]->director;
-		char* cast = join(movies[i]->cast, movies[i]->castCount, ", ");
-		strCmp(cast, "") ? std::cout << ", " << cast << "\n" : std::cout << "\n";
-		delete[] cast;
-	}
+	printMovies(movies, moviesCount);
 
+	freeMovieArray(movies, moviesCount);
     waitForKeyPress();
-    returnMenu();
 }

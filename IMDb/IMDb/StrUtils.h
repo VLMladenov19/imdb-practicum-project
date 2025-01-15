@@ -1,11 +1,13 @@
 #pragma once
 
-constexpr size_t STR_SIZE = 1024;
+#include "Constants.h"
 
 size_t strLen(const char* str);
 char toLower(const char sym);
+bool isDigit(const char sym);
 short charToDigit(const char sym);
 int strToNum(const char* str);
+float strToFloat(const char* str);
 
 void strCopy(char* dest, const char* src);
 int strCmp(const char* str1, const char* str2);
@@ -16,4 +18,4 @@ bool strCaseContains(const char* str, const char* subStr);
 
 char* writeStr();
 char* fixSize(const char* str);
-void freeMemory(char** str, size_t size);
+void freeStrArray(char** str, size_t size);

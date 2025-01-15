@@ -1,6 +1,5 @@
-Django Unchained#2012#Comedy#Quentin Tarantino#Jamie Foxx#Christopher Waltz#Leonardo DiCaprio#3
-Rango#2011#Western Comedy#Gore Verbinski#Johnny Depp#Isla Fisher#Timothy Olyphant#3
-One Day#2011#Romance#Lone Scherfig#Anne Hathaway#Jim Sturgess#2
-The Lord of the Rings: The Two Towers#2002#Action Epic#Peter Jackson#Elijah Wood#Ian McKellen#Viggo Mortensen#3
-this, should wok#2002#Wow#Crazy#0
-this, work#2002#wow#woow#0
+Django Unchained#2012#Comedy#340#8.9#Quentin Tarantino#3#Jamie Foxx#Christopher Waltz#Leonardo DiCaprio
+Rango#2011#Western Comedy#210#10#Gore Verbinski#3#Johnny Depp#Isla Fisher#Timothy Olyphant
+One Day#2011#Romance#126#7.5#Lone Scherfig#2#Anne Hathaway#Jim Sturgess
+The Lord of the Rings: The Two Towers#2002#Action Epic#523#6.5#Peter Jackson#3#Elijah Wood#Ian McKellen#Viggo Mortensen
+Mad Max: Fury Road#2015#Action Epic#1#5#George Miller#3#Tom Hardy#Charlize Theron#Nicholas Hoult

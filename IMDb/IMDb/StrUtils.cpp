@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "StrUtils.h"
+#include "Constants.h"
 
 size_t strLen(const char* str)
 {
@@ -24,9 +25,14 @@ char toLower(const char sym)
 	return sym;
 }
 
+bool isDigit(const char sym)
+{
+	return '0' <= sym && sym <= '9';
+}
+
 short charToDigit(const char sym)
 {
-	if ('0' <= sym && sym <= '9')
+	if (isDigit(sym))
 	{
 		return sym - '0';
 	}
@@ -37,17 +43,49 @@ int strToNum(const char* str)
 {
 	if (!str) return 0;
 
-	size_t length = strLen(str);
 	int num = 0;
-	for (size_t i = 0; i < length; i++)
+	while (*str)
 	{
-		short digit = charToDigit(str[i]);
+		short digit = charToDigit(*str);
 		if (digit == -1)
+		{
 			return num;
+		}
 		num = num * 10 + digit;
+		str++;
 	}
 
 	return num;
+}
+
+float strToFloat(const char* str)
+{
+	if (!str) return 0.0f;
+
+	float result = 0;
+	while (*str != '.' || *str == ',')
+	{
+		short digit = charToDigit(*str);
+		if(digit == -1)
+		{
+			return result;
+		}
+		result = result * 10 + digit;
+		str++;
+	}
+
+	float fractionMult = 0.1f;
+	while (*str)
+	{
+		if (isDigit(*str))
+		{
+			result += charToDigit(*str) * fractionMult;
+			fractionMult *= 0.1f;
+		}
+		str++;
+	}
+
+	return result;
 }
 
 void strCopy(char* dest, const char* src)
@@ -220,7 +258,7 @@ char* fixSize(const char* str)
 	return fixed;
 }
 
-void freeMemory(char** strArr, size_t size)
+void freeStrArray(char** strArr, size_t size)
 {
 	if (!strArr) return;
 

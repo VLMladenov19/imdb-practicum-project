@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
 
-#include "Response.h"
 #include "Movies.h"
+#include "Response.h"
 #include "Constants.h"
 
 Response addMovie(const Movie movie)
@@ -15,16 +15,24 @@ Response addMovie(const Movie movie)
 		return Response(false, "Error: File not found");
 	}
 
-	file << movie.title << "#" << movie.year << "#" << movie.genre << "#" <<
-		movie.director << "#";
+	file << movie.title << "#" << movie.year << "#" << movie.genre << "#" << 
+		movie.ratingsCount << "#" << movie.rating << "#" <<
+		movie.director << "#" << movie.castCount;
 	for (size_t i = 0; i < movie.castCount; i++)
 	{
-		file << movie.cast[i] << "#";
+		file << "#" << movie.cast[i];
 	}
-	file << movie.castCount << "\n";
+	file << "\n";
 
 	file.close();
 	return Response(true, "Success");
+}
+
+float calculateNewRating(const Movie movie, const float newRating)
+{
+	float floatRating = (movie.rating * movie.ratingsCount + newRating) / (movie.ratingsCount + 1);
+	int intRating = floatRating * 100;
+	return intRating / 100.0f;
 }
 
 bool compareTitle(const char* title, char** movie)
@@ -57,7 +65,7 @@ Movie** getMoviesBy(const char* search,
 	{
 		size_t infoCount = 0;
 		char** movieInfo = split(line, '#', infoCount);
-		size_t castCount = strToNum(movieInfo[infoCount - 1]);
+		size_t castCount = strToNum(movieInfo[CAST_COUNT_INDEX]);
 		char** cast = new char* [castCount];
 		for (size_t i = 0; i < castCount; i++)
 		{
@@ -67,19 +75,22 @@ Movie** getMoviesBy(const char* search,
 
 		if (!searchFunc(search, movieInfo))
 		{
-			freeMemory(movieInfo, infoCount);
+			freeStrArray(movieInfo, infoCount);
+			freeStrArray(cast, castCount);
 			continue;
 		}
 
-		Movie* movie = new Movie(movieInfo[TITLE_INDEX], 
+		Movie* movie = new Movie(movieInfo[TITLE_INDEX],
 			strToNum(movieInfo[YEAR_INDEX]),
-			movieInfo[GENRE_INDEX], 
+			movieInfo[GENRE_INDEX],
+			strToNum(movieInfo[RATING_COUNT_INDEX]),
+			strToFloat(movieInfo[RATING_INDEX]),
 			movieInfo[DIRECTORT_INDEX],
-			cast,
-			castCount);
+			castCount,
+			cast);
 		movies[moviesCount++] = movie;
-		freeMemory(movieInfo, infoCount);
-		freeMemory(cast, castCount);
+		freeStrArray(movieInfo, infoCount);
+		freeStrArray(cast, castCount);
 	}
 
 	movies = fixMatrixSize(movies, moviesCount);
@@ -98,13 +109,37 @@ Movie** fixMatrixSize(Movie** movies, size_t count)
 			movies[i]->title,
 			movies[i]->year,
 			movies[i]->genre,
+			movies[i]->ratingsCount,
+			movies[i]->rating,
 			movies[i]->director,
-			movies[i]->cast,
-			movies[i]->castCount);
+			movies[i]->castCount,
+			movies[i]->cast);
 		fixed[i] = temp;
 		delete[] movies[i];
 	}
 	delete[] movies;
 
 	return fixed;
+}
+
+void freeMovie(Movie* movie)
+{
+	if (!movie) return;
+
+	delete[] movie->title;
+	delete[] movie->genre;
+	delete[] movie->director;
+	freeStrArray(movie->cast, movie->castCount);
+	delete movie;
+}
+
+void freeMovieArray(Movie** movies, size_t count)
+{
+	if (!movies) return;
+
+	for (size_t i = 0; i < count; i++)
+	{
+		freeMovie(movies[i]);
+	}
+	delete[] movies;
 }
