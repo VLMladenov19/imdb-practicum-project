@@ -61,13 +61,19 @@ Movie* getMovie(const size_t);
 
 float calculateNewRating(const Movie*, const float);
 
-bool compareTitle(const char*, char**);
-bool compareGenre(const char*, char**);
-Movie** getMoviesBy(const char*,
-	size_t&,
-	bool(*)(const char*, char**) = [](const char*, char**) 
-	{return true;});
+bool matchTitle(const char*, char**);
+bool matchGenre(const char*, char**);
+Movie** getMoviesBy(const char*, size_t&,
+	bool(*)(const char*, char**) = [](const char*, char**) { return true; });
 Response addRating(const size_t, const float);
+
+void swapMovies(Movie*&, Movie*&);
+void reverseMovies(Movie**, const size_t);
+
+int compareTitle(Movie*, Movie*);
+int compareGenre(Movie*, Movie*);
+void sortBy(Movie**, const size_t, 
+	int (*)(Movie*, Movie*) = [](Movie*, Movie*) { return 0; });
 
 Movie** fixMatrixSize(Movie**, size_t);
 void freeMovie(Movie*);

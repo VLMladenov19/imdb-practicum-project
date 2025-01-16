@@ -82,7 +82,8 @@ void adminMenu()
         std::cout << "\t" << ADMIN_UPDATE_MOVIE_ACTION << ". Update movie\n";
         std::cout << "\t" << ADMIN_REMOVE_MOVIE_ACTION << ". Remove movie\n";
         std::cout << "\t" << ADMIN_RATE_MOVIE_ACTION << ". Rate movie\n";
-        std::cout << "\t" << ADMIN_SORT_FILTER_ACTION << ". Sort and filter by rating\n";
+        std::cout << "\t" << ADMIN_SORT_ACTION << ". Sort movies\n";
+        std::cout << "\t" << ADMIN_FILTER_ACTION << ". Filter movies\n";
         std::cout << "\t" << EXIT_ACTION << ". Exit\n\n";
 
 		std::cout << "Select action: ";
@@ -94,10 +95,10 @@ void adminMenu()
 			addMovieMenu();
 			break;
 		case ADMIN_SEARCH_BY_TITLE_ACTION:
-			searchByMenu("Title", *compareTitle);
+			searchByMenu("Title", matchTitle);
 			break;
 		case ADMIN_SEARCH_BY_GENRE_ACTION:
-			searchByMenu("Genre", *compareGenre);
+			searchByMenu("Genre", matchGenre);
 			break;
 		case ADMIN_LIST_ALL_ACTION:
 			listAllMenu();
@@ -111,7 +112,10 @@ void adminMenu()
 		case ADMIN_RATE_MOVIE_ACTION:
 			rateMovieMenu();
 			break;
-		case ADMIN_SORT_FILTER_ACTION:
+		case ADMIN_SORT_ACTION:
+			sortMoviesMenu();
+			break;
+		case ADMIN_FILTER_ACTION:
 			break;
 		case EXIT_ACTION:
 			exit(0);
@@ -381,5 +385,55 @@ void rateMovieMenu()
 	{
 		std::cerr << response.message << "\n";
 		waitForKeyPress();
+	}
+}
+
+void sortMoviesMenu()
+{
+	size_t moviesCount = 0;
+	Movie** movies = getMoviesBy("", moviesCount);
+	while(true)
+	{
+		system("cls");
+		std::cout << "Sort Movies\n\n";
+
+		for (size_t i = 0; i < moviesCount; i++)
+		{
+			std::cout << "\t";
+			std::cout << movies[i]->title << ", ";
+			std::cout << movies[i]->genre << ", ";
+			std::cout << movies[i]->rating << "\n";
+		}
+
+		std::cout << "\n\tSort by:\n";
+		std::cout << "\t" << SORT_BY_TITLE_ASC << ". Title ASC\n";
+		std::cout << "\t" << SORT_BY_TITLE_DESC << ". Title DESC\n";
+		std::cout << "\t" << SORT_BY_GENRE_ASC << ". Genre ASC\n";
+		std::cout << "\t" << SORT_BY_GENRE_DESC << ". Genre DESC\n";
+		std::cout << "\t" << EXIT_ACTION << ". Cancel\n";
+		std::cout << "\nSelect action: ";
+		short action = chooseAction();
+
+		switch (action)
+		{
+		case SORT_BY_TITLE_ASC:
+			sortBy(movies, moviesCount, compareTitle);
+			break;
+		case SORT_BY_TITLE_DESC:
+			sortBy(movies, moviesCount, compareTitle);
+			reverseMovies(movies, moviesCount);
+			break;
+		case SORT_BY_GENRE_ASC:
+			sortBy(movies, moviesCount, compareGenre);
+			break;
+		case SORT_BY_GENRE_DESC:
+			sortBy(movies, moviesCount, compareGenre);
+			reverseMovies(movies, moviesCount);
+			break;
+		case EXIT_ACTION:
+			freeMovieArray(movies, moviesCount);
+			waitForKeyPress();
+			return;
+		}
 	}
 }

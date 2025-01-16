@@ -36,3 +36,5 @@ size_t chooseMovieMenu();
 void updateMovieMenu();
 void removeMovieMenu();
 void rateMovieMenu();
+
+void sortMoviesMenu();

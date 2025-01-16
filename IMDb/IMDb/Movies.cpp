@@ -136,12 +136,12 @@ float calculateNewRating(const Movie* movie, const float newRating)
 	return intRating / 100.0f;
 }
 
-bool compareTitle(const char* title, char** movie)
+bool matchTitle(const char* title, char** movie)
 {
 	return strCaseContains(movie[TITLE_INDEX], title);
 }
 
-bool compareGenre(const char* genre, char** movie)
+bool matchGenre(const char* genre, char** movie)
 {
 	return strCaseContains(movie[GENRE_INDEX], genre);
 }
@@ -214,6 +214,57 @@ Response addRating(const size_t movieIndex, const float newRating)
 	}
 
 	return Response(true, "Movie rated successfully.");
+}
+
+void swapMovies(Movie*& movie1, Movie*& movie2)
+{
+	if (!movie1 || !movie2) return;
+
+	Movie* tempMovie = movie1;
+	movie1 = movie2;
+	movie2 = tempMovie;
+}
+
+void reverseMovies(Movie** movies, const size_t moviesCount)
+{
+	if (!movies) return;
+
+	for (size_t i = 0; i < moviesCount / 2; i++)
+	{
+		swapMovies(movies[i], movies[moviesCount - i - 1]);
+	}
+}
+
+int compareTitle(Movie* movie1, Movie* movie2)
+{
+	return strCmp(movie1->title, movie2->title);
+}
+
+int compareGenre(Movie* movie1, Movie* movie2)
+{
+	return strCmp(movie1->genre, movie2->genre);
+}
+
+void sortBy(Movie** movies, const size_t moviesCount, int (*compare)(Movie*, Movie*))
+{
+	if (!movies) return;
+
+	for (size_t i = 0; i < moviesCount - 1; i++)
+	{
+		size_t minIndex = i;
+		for (size_t j = i + 1; j < moviesCount; j++)
+		{
+			if (compare(movies[minIndex], movies[j]) > 0)
+			{
+				minIndex = j;
+			}
+		}
+
+		if (minIndex != i)
+		{
+			swapMovies(movies[i], movies[minIndex]);
+		}
+	}
 }
 
 Movie** fixMatrixSize(Movie** movies, size_t count)

@@ -34,14 +34,22 @@ constexpr short ADMIN_LIST_ALL_ACTION = 4;
 constexpr short ADMIN_UPDATE_MOVIE_ACTION = 5;
 constexpr short ADMIN_REMOVE_MOVIE_ACTION = 6;
 constexpr short ADMIN_RATE_MOVIE_ACTION = 7;
-constexpr short ADMIN_SORT_FILTER_ACTION = 8;
+constexpr short ADMIN_SORT_ACTION = 8;
+constexpr short ADMIN_FILTER_ACTION = 9;
 
 // User menu
 constexpr short USER_SEARCH_BY_TITLE_ACTION = 1;
 constexpr short USER_SEARCH_BY_GENRE_ACTION = 2;
 constexpr short USER_LIST_ALL_ACTION = 3;
 constexpr short USER_RATE_MOVIE_ACTION = 4;
-constexpr short USER_SORT_FILTER_ACTION = 5;
+constexpr short USER_SORT_ACTION = 5;
+constexpr short USER_FILTER_ACTION = 6;
+
+// Sort menu
+constexpr short SORT_BY_TITLE_ASC = 1;
+constexpr short SORT_BY_TITLE_DESC = 2;
+constexpr short SORT_BY_GENRE_ASC = 3;
+constexpr short SORT_BY_GENRE_DESC = 4;
 
 // Indexes of all "Movie" elements
 constexpr short TITLE_INDEX = 0;
