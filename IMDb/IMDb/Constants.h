@@ -1,3 +1,18 @@
+/**
+*
+* Solution to course project # 06 - IMDb
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2023/2024
+*
+* @author Vasil Mladenov
+* @idnumber 5MI0600475
+* @compiler VC
+* 
+* Header file containing all constants used in the program
+*
+*/
+
 #pragma once
 
 constexpr size_t STR_SIZE = 1024;

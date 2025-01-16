@@ -1,3 +1,18 @@
+/**
+*
+* Solution to course project # 06 - IMDb
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2023/2024
+*
+* @author Vasil Mladenov
+* @idnumber 5MI0600475
+* @compiler VC
+*
+* Header file for all declarations of movies related functions
+*
+*/
+
 #pragma once
 
 #include "StrUtils.h"
@@ -44,7 +59,7 @@ Response removeMovie(const size_t);
 Response updateMovie(const size_t, const Movie*);
 Movie* getMovie(const size_t);
 
-float calculateNewRating(const Movie, const float);
+float calculateNewRating(const Movie*, const float);
 
 bool compareTitle(const char*, char**);
 bool compareGenre(const char*, char**);
