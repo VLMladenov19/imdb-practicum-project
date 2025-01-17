@@ -62,6 +62,7 @@ void chooseRole()
 			return;
 		default:
 			std::cout << "Invalid value for role\n";
+			waitForKeyPress();
 			break;
 		}
 	}
@@ -116,6 +117,7 @@ void adminMenu()
 			sortMoviesMenu();
 			break;
 		case ADMIN_FILTER_ACTION:
+			filterMoviesMenu();
 			break;
 		case EXIT_ACTION:
 			exit(0);
@@ -432,8 +434,43 @@ void sortMoviesMenu()
 			break;
 		case EXIT_ACTION:
 			freeMovieArray(movies, moviesCount);
-			waitForKeyPress();
 			return;
 		}
+	}
+}
+
+void filterMoviesMenu()
+{
+	size_t moviesCount = 0;
+	Movie** movies = getMoviesBy("", moviesCount);
+	float minRating = 0.0f;
+	while (true)
+	{
+		system("cls");
+		std::cout << "Filter Movies\n\n";
+
+		for (size_t i = 0; i < moviesCount; i++)
+		{
+			if (movies[i]->rating >= minRating)
+			{
+				std::cout << "\t";
+				std::cout << movies[i]->title << ", ";
+				std::cout << movies[i]->genre << ", ";
+				std::cout << movies[i]->rating << "\n";
+			}
+		}
+
+		std::cout << "\n\tMinimum Rating(0-10): ";
+		char* ratingStr = writeStr();
+		float ratingFloat = strToFloat(ratingStr);
+		delete[] ratingStr;
+
+		if (ratingFloat < RATING_MIN || ratingFloat > RATING_MAX)
+		{
+			std::cout << "\nInvalid rating value.";
+			waitForKeyPress();
+			continue;
+		}
+		minRating = ratingFloat;
 	}
 }

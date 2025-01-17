@@ -38,3 +38,4 @@ void removeMovieMenu();
 void rateMovieMenu();
 
 void sortMoviesMenu();
+void filterMoviesMenu();

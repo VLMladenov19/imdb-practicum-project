@@ -56,7 +56,7 @@ short charToDigit(const char sym)
 
 int strToNum(const char* str)
 {
-	if (!str) return 0;
+	if (!str || !isDigit(*str)) return -1;
 
 	int num = 0;
 	while (*str)
@@ -75,7 +75,7 @@ int strToNum(const char* str)
 
 float strToFloat(const char* str)
 {
-	if (!str) return 0.0f;
+	if (!str || !isDigit(*str)) return -1;
 
 	float result = 0;
 	while (*str != '.' || *str == ',')
@@ -184,6 +184,7 @@ char** split(const char* str, const char delimiter, size_t& outSize)
 			length = 0;
 			index++;
 			str++;
+			continue;
 		}
 		currWord[length++] = *str;
 		str++;
