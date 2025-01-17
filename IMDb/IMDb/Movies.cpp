@@ -128,14 +128,6 @@ Movie* getMovie(const size_t movieIndex)
 	);
 }
 
-float calculateNewRating(const Movie* movie, const float newRating)
-{
-	float floatRating = (movie->rating * movie->ratingsCount + newRating) 
-		/ (movie->ratingsCount + 1);
-	int intRating = floatRating * 100;
-	return intRating / 100.0f;
-}
-
 bool matchTitle(const char* title, char** movie)
 {
 	return strCaseContains(movie[TITLE_INDEX], title);
@@ -191,6 +183,14 @@ Movie** getMoviesBy(const char* search, size_t& moviesCount,
 	movies = fixMatrixSize(movies, moviesCount);
 
 	return movies;
+}
+
+float calculateNewRating(const Movie* movie, const float newRating)
+{
+	float floatRating = (movie->rating * movie->ratingsCount + newRating)
+		/ (movie->ratingsCount + 1);
+	int intRating = floatRating * 100;
+	return intRating / 100.0f;
 }
 
 Response addRating(const size_t movieIndex, const float newRating)
@@ -267,12 +267,12 @@ void sortBy(Movie** movies, const size_t moviesCount, int (*compare)(Movie*, Mov
 	}
 }
 
-Movie** fixMatrixSize(Movie** movies, size_t count)
+Movie** fixMatrixSize(Movie** movies, size_t moviesCount)
 {
 	if (!movies) return nullptr;
 
-	Movie** fixed = new Movie*[count];
-	for (size_t i = 0; i < count; i++)
+	Movie** fixed = new Movie*[moviesCount];
+	for (size_t i = 0; i < moviesCount; i++)
 	{
 		Movie* temp = new Movie(
 			movies[i]->title,

@@ -26,15 +26,6 @@ void waitForKeyPress()
 	std::cin.get();
 }
 
-short chooseAction()
-{
-	char* input = writeStr();
-	short action = strToNum(input);
-	delete[] input;
-
-	return action;
-}
-
 void chooseRole()
 {
 	short role = -1;
@@ -47,7 +38,7 @@ void chooseRole()
 		std::cout << "\t" << EXIT_ACTION << ".Exit\n\n";
 
 		std::cout << "Select role: ";
-		role = chooseAction();
+		role = writeNum();
 
 		switch (role)
 		{
@@ -61,7 +52,7 @@ void chooseRole()
 			exit(0);
 			return;
 		default:
-			std::cout << "Invalid value for role\n";
+			std::cout << "\nInvalid value for role\n";
 			waitForKeyPress();
 			break;
 		}
@@ -88,7 +79,7 @@ void adminMenu()
         std::cout << "\t" << EXIT_ACTION << ". Exit\n\n";
 
 		std::cout << "Select action: ";
-		short action = chooseAction();
+		short action = writeNum();
 
 		switch (action)
 		{
@@ -123,7 +114,7 @@ void adminMenu()
 			exit(0);
 			break;
 		default:
-			std::cout << "Invalid value for action\n";
+			std::cout << "\nInvalid value for action\n";
 			waitForKeyPress();
 			break;
 		}
@@ -140,8 +131,7 @@ void addMovieMenu()
 	char* title = writeStr();
 
 	std::cout << "Year: ";
-	short year;
-	std::cin >> year;
+	short year = writeNum();
 
 	std::cout << "Genre: ";
 	char* genre = writeStr();
@@ -150,8 +140,7 @@ void addMovieMenu()
 	char* director = writeStr();
 
 	std::cout << "Cast Count: ";
-	short castCount;
-	std::cin >> castCount;
+	short castCount = writeNum();
 
 	char** cast = new char* [castCount];
 	for (short i = 0; i < castCount; i++)
@@ -295,8 +284,7 @@ void updateMovieMenu()
 
 	std::cout << "Current Year: " << movie->year << "\n";
 	std::cout << "New Year: ";
-	unsigned newYear;
-	std::cin >> newYear;
+	short newYear = writeNum();
 
 	std::cout << "Current Genre: " << movie->genre << "\n";
 	std::cout << "New Genre: ";
@@ -308,11 +296,10 @@ void updateMovieMenu()
 
 	std::cout << "Current Cast Count: " << movie->castCount << "\n";
 	std::cout << "New Cast Count: ";
-	size_t newCastCount;
-	std::cin >> newCastCount;
+	short newCastCount = writeNum();
 
 	char** newCast = new char*[newCastCount];
-	for (size_t i = 0; i < newCastCount; i++)
+	for (short i = 0; i < newCastCount; i++)
 	{
 		std::cout << "New Cast Member " << i + 1 << ": ";
 		newCast[i] = writeStr();
@@ -414,7 +401,7 @@ void sortMoviesMenu()
 		std::cout << "\t" << SORT_BY_GENRE_DESC << ". Genre DESC\n";
 		std::cout << "\t" << EXIT_ACTION << ". Cancel\n";
 		std::cout << "\nSelect action: ";
-		short action = chooseAction();
+		short action = writeNum();
 
 		switch (action)
 		{

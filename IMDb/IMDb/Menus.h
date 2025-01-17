@@ -18,7 +18,6 @@
 #include "Movies.h"
 
 void waitForKeyPress();
-short chooseAction();
 
 void chooseRole();
 
@@ -27,9 +26,9 @@ void userMenu();
 
 void addMovieMenu();
 
-void printMovies(Movie**, const size_t);
-void searchByMenu(const char*, 
-	bool(*)(const char*, char**));
+void printMovies(Movie** movies, const size_t moviesCount);
+void searchByMenu(const char* searchText,
+	bool(*searchFunc)(const char*, char**));
 void listAllMenu();
 
 size_t chooseMovieMenu();

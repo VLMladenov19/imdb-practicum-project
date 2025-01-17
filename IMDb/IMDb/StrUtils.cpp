@@ -273,16 +273,25 @@ char* writeStr()
 {
 	char* str = new char[STR_SIZE + 1];
 
-	if (std::cin.peek() == '\n')
+	/*if (std::cin.peek() == '\n')
 	{
 		std::cin.ignore();
-	}
+	}*/
 	std::cin.getline(str, STR_SIZE);
 
 	str = fixSize(str);
 	removeSymbol(str, '\n');
 	
 	return fixSize(str);
+}
+
+short writeNum()
+{
+	char* input = writeStr();
+	short number = strToNum(input);
+	delete[] input;
+
+	return number;
 }
 
 char* fixSize(const char* str)

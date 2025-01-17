@@ -33,5 +33,6 @@ bool strCaseContains(const char* str, const char* subStr);
 void removeSymbol(char* str, const char sym);
 
 char* writeStr();
+short writeNum();
 char* fixSize(const char* str);
 void freeStrArray(char** str, size_t size);

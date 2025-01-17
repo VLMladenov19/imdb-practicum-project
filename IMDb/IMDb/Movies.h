@@ -21,18 +21,18 @@
 struct Movie
 {
 	char* title;
-	unsigned year;
+	short year;
 	char* genre;
 	unsigned ratingsCount;
 	float rating;
 	char* director;
-	size_t castCount;
+	short castCount;
 	char** cast;
 
-	Movie(const char* title, const unsigned year, 
+	Movie(const char* title, const short year, 
 		const char* genre, const unsigned ratingsCount, 
 		const float rating, const char* director, 
-		const unsigned castCount, char** cast)
+		const short castCount, char** cast)
 	{
 		this->title = new char[strLen(title) + 1];
 		strCopy(this->title, title);
@@ -45,7 +45,7 @@ struct Movie
 		strCopy(this->director, director);
 		this->castCount = castCount;
 		this->cast = new char*[castCount];
-		for (size_t i = 0; i < castCount; i++)
+		for (short i = 0; i < castCount; i++)
 		{
 			this->cast[i] = new char[strLen(cast[i]) + 1];
 			strCopy(this->cast[i], cast[i]);
@@ -53,28 +53,27 @@ struct Movie
 	}
 };
 
-Response addMovie(const Movie*);
+Response addMovie(const Movie* movie);
 Response removeAllMovies();
-Response removeMovie(const size_t);
-Response updateMovie(const size_t, const Movie*);
-Movie* getMovie(const size_t);
+Response removeMovie(const size_t movieIndex);
+Response updateMovie(const size_t movieIndex, const Movie* newMovie);
+Movie* getMovie(const size_t movieIndex);
 
-float calculateNewRating(const Movie*, const float);
+bool matchTitle(const char* title, char** movie);
+bool matchGenre(const char* genre, char** movie);
+Movie** getMoviesBy(const char* search, size_t& moviesCount,
+	bool(*searchFunc)(const char*, char**) = [](const char*, char**) { return true; });
 
-bool matchTitle(const char*, char**);
-bool matchGenre(const char*, char**);
-Movie** getMoviesBy(const char*, size_t&,
-	bool(*)(const char*, char**) = [](const char*, char**) { return true; });
-Response addRating(const size_t, const float);
+float calculateNewRating(const Movie* movie, const float newRating);
+Response addRating(const size_t movieIndex, const float newRating);
 
-void swapMovies(Movie*&, Movie*&);
-void reverseMovies(Movie**, const size_t);
+void swapMovies(Movie*& movie1, Movie*& movie2);
+void reverseMovies(Movie** movies, const size_t moviesCount);
+int compareTitle(Movie* movie1, Movie* movie2);
+int compareGenre(Movie* movie1, Movie* movie2);
+void sortBy(Movie** movies, const size_t moviesCount, 
+	int (*compare)(Movie*, Movie*) = [](Movie*, Movie*) { return 0; });
 
-int compareTitle(Movie*, Movie*);
-int compareGenre(Movie*, Movie*);
-void sortBy(Movie**, const size_t, 
-	int (*)(Movie*, Movie*) = [](Movie*, Movie*) { return 0; });
-
-Movie** fixMatrixSize(Movie**, size_t);
-void freeMovie(Movie*);
-void freeMovieArray(Movie**, size_t);
+Movie** fixMatrixSize(Movie** movies, size_t moviesCount);
+void freeMovie(Movie* movie);
+void freeMovieArray(Movie** movies, size_t count);
