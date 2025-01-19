@@ -2,4 +2,4 @@ Django Unchained#2012#Comedy#340#8.9#Quentin Tarantino#3#Jamie Foxx#Christopher 
 Rango#2011#Western Comedy#210#10#Gore Verbinski#3#Johnny Depp#Isla Fisher#Timothy Olyphant
 One Day#2011#Romance#126#7.5#Lone Scherfig#2#Anne Hathaway#Jim Sturgess
 Mad Max: Fury Road#2015#Action Epic#1#5#George Miller#3#Tom Hardy#Charlize Theron#Nicholas Hoult
-Baby Driver#2017#Car Action Drama#1#5#Edgar Wright#3#Ansel Elgort#Jamie Foxx#Jon Hamm
+Baby Driver#2017#Car Action Drama#2#7.5#Edgar Wright#3#Ansel Elgort#Jamie Foxx#Jon Hamm

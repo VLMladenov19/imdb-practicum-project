@@ -35,9 +35,8 @@ constexpr short ADMIN_SEARCH_BY_GENRE_ACTION = 3;
 constexpr short ADMIN_LIST_ALL_ACTION = 4;
 constexpr short ADMIN_UPDATE_MOVIE_ACTION = 5;
 constexpr short ADMIN_REMOVE_MOVIE_ACTION = 6;
-constexpr short ADMIN_RATE_MOVIE_ACTION = 7;
-constexpr short ADMIN_SORT_ACTION = 8;
-constexpr short ADMIN_FILTER_ACTION = 9;
+constexpr short ADMIN_SORT_ACTION = 7;
+constexpr short ADMIN_FILTER_ACTION = 8;
 
 // User menu
 constexpr short USER_SEARCH_BY_TITLE_ACTION = 1;

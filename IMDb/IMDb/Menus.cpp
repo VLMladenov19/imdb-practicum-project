@@ -22,7 +22,7 @@
 
 void waitForKeyPress()
 {
-	std::cout << "\nPress enter to continue...\n";
+	std::cout << "\nPress Enter to continue...\n";
 	std::cin.get();
 }
 
@@ -46,7 +46,7 @@ void chooseRole()
 			adminMenu();
 			break;
 		case USER_ACTION:
-			//userMenu();
+			userMenu();
 			break;
 		case EXIT_ACTION:
 			exit(0);
@@ -73,7 +73,6 @@ void adminMenu()
         std::cout << "\t" << ADMIN_LIST_ALL_ACTION << ". List all\n";
         std::cout << "\t" << ADMIN_UPDATE_MOVIE_ACTION << ". Update movie\n";
         std::cout << "\t" << ADMIN_REMOVE_MOVIE_ACTION << ". Remove movie\n";
-        std::cout << "\t" << ADMIN_RATE_MOVIE_ACTION << ". Rate movie\n";
         std::cout << "\t" << ADMIN_SORT_ACTION << ". Sort movies\n";
         std::cout << "\t" << ADMIN_FILTER_ACTION << ". Filter movies\n";
         std::cout << "\t" << EXIT_ACTION << ". Exit\n\n";
@@ -101,13 +100,60 @@ void adminMenu()
 		case ADMIN_REMOVE_MOVIE_ACTION:
 			removeMovieMenu();
 			break;
-		case ADMIN_RATE_MOVIE_ACTION:
-			rateMovieMenu();
-			break;
 		case ADMIN_SORT_ACTION:
 			sortMoviesMenu();
 			break;
 		case ADMIN_FILTER_ACTION:
+			filterMoviesMenu();
+			break;
+		case EXIT_ACTION:
+			exit(0);
+			break;
+		default:
+			std::cout << "\nInvalid value for action\n";
+			waitForKeyPress();
+			break;
+		}
+	}
+}
+
+void userMenu()
+{
+	short action = -1;
+	while (true)
+	{
+		system("cls");
+
+		std::cout << "User Menu\n\n";
+		std::cout << "\t" << USER_SEARCH_BY_TITLE_ACTION << ". Search by title\n";
+		std::cout << "\t" << USER_SEARCH_BY_GENRE_ACTION << ". Search by genre\n";
+		std::cout << "\t" << USER_LIST_ALL_ACTION << ". List all\n";
+		std::cout << "\t" << USER_RATE_MOVIE_ACTION << ". Rate movie\n";
+		std::cout << "\t" << USER_SORT_ACTION << ". Sort movies\n";
+		std::cout << "\t" << USER_FILTER_ACTION << ". Filter movies\n";
+		std::cout << "\t" << EXIT_ACTION << ". Exit\n\n";
+
+		std::cout << "Select action: ";
+		short action = writeNum();
+
+		switch (action)
+		{
+		case USER_SEARCH_BY_TITLE_ACTION:
+			searchByMenu("Title", matchTitle);
+			break;
+		case USER_SEARCH_BY_GENRE_ACTION:
+			searchByMenu("Genre", matchGenre);
+			break;
+		case USER_LIST_ALL_ACTION:
+			listAllMenu();
+			break;
+		case USER_RATE_MOVIE_ACTION:
+			rateMovieMenu();
+			break;
+		case USER_SORT_ACTION:
+			sortMoviesMenu();
+			break;
+		case USER_FILTER_ACTION:
 			filterMoviesMenu();
 			break;
 		case EXIT_ACTION:
@@ -348,12 +394,13 @@ void updateMovieMenu()
 
 	std::cout << "Update Movie\n\n";
 	// Minus 1 to match index of movies in file
-	size_t movieIndex = chooseMovieMenu() - 1;
+	size_t movieIndex = chooseMovieMenu();
 
-	if (movieIndex == EXIT_ACTION - 1)
+	if (movieIndex == EXIT_ACTION)
 	{
 		return;
 	}
+	movieIndex -= 1;
 
 	Movie* movie = getMovie(movieIndex);
 
@@ -456,12 +503,13 @@ void removeMovieMenu()
 	system("cls");
 
 	std::cout << "Remove Movie\n\n";
-	size_t movieIndex = chooseMovieMenu() - 1;
+	size_t movieIndex = chooseMovieMenu();
 
-	if (movieIndex == EXIT_ACTION - 1)
+	if (movieIndex == EXIT_ACTION)
 	{
 		return;
 	}
+	movieIndex -= 1;
 
 	Response response = removeMovie(movieIndex);
 
@@ -477,12 +525,13 @@ void rateMovieMenu()
 	system("cls");
 
 	std::cout << "Rate Movie\n\n";
-	size_t movieIndex = chooseMovieMenu() - 1;
+	size_t movieIndex = chooseMovieMenu();
 
-	if (movieIndex == EXIT_ACTION - 1)
+	if (movieIndex == EXIT_ACTION)
 	{
 		return;
 	}
+	movieIndex -= 1;
 
 	while (true)
 	{
@@ -579,7 +628,7 @@ void filterMoviesMenu()
 			}
 		}
 
-		std::cout << "\n\t-1 to exit.";
+		std::cout << "\n\tPress Enter or type text to exit.";
 		std::cout << "\n\tMinimum Rating(0-10): ";
 		char* ratingStr = writeStr();
 		float ratingFloat = strToFloat(ratingStr);
