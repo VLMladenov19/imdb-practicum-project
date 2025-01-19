@@ -172,7 +172,7 @@ Movie** getMoviesBy(const char* search, size_t& moviesCount,
 			movieInfo[GENRE_INDEX],
 			strToNum(movieInfo[RATING_COUNT_INDEX]),
 			strToFloat(movieInfo[RATING_INDEX]),
-			movieInfo[DIRECTORT_INDEX],
+			movieInfo[DIRECTOR_INDEX],
 			castCount,
 			cast);
 		movies[moviesCount++] = movie;

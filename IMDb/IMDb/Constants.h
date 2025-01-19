@@ -18,6 +18,8 @@
 constexpr size_t STR_SIZE = 1024;
 
 constexpr char MOVIES_FILE[] = "movies.txt";
+constexpr char FILE_DIVIDER_CHAR = '#';
+constexpr char FILE_DIVIDER_STR[] = "#";
 
 // Menu actions values
 constexpr short EXIT_ACTION = 0;
@@ -57,7 +59,7 @@ constexpr short YEAR_INDEX = 1;
 constexpr short GENRE_INDEX = 2;
 constexpr short RATING_COUNT_INDEX = 3;
 constexpr short RATING_INDEX = 4;
-constexpr short DIRECTORT_INDEX = 5;
+constexpr short DIRECTOR_INDEX = 5;
 constexpr short CAST_COUNT_INDEX = 6;
 constexpr short CAST_INDEX = 7; // Index to the first cast member (if exists)
 

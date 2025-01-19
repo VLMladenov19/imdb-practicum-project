@@ -24,8 +24,13 @@ void chooseRole();
 void adminMenu();
 void userMenu();
 
+bool isInputValid(const char* input, const short maxLength);
+bool isYearValid(const short year);
+bool validateInput(const char* input, const short maxLength, const char* placeholder);
+bool validateYear(const short year);
 void addMovieMenu();
 
+void printMovie(const Movie* movie);
 void printMovies(Movie** movies, const size_t moviesCount);
 void searchByMenu(const char* searchText,
 	bool(*searchFunc)(const char*, char**));
