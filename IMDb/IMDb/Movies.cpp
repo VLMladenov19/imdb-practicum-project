@@ -29,12 +29,12 @@ Response addMovie(const Movie* movie)
 		return Response(false, "Error: File not found");
 	}
 
-    file << movie->title << "#" << movie->year << "#" << movie->genre << "#" << 
-		movie->ratingsCount << "#" << movie->rating << "#" << 
-		movie->director << "#" << movie->castCount;
+    file << movie->title << FILE_DIVIDER_STR << movie->year << FILE_DIVIDER_STR << movie->genre << FILE_DIVIDER_STR << 
+		movie->ratingsCount << FILE_DIVIDER_STR << movie->rating << FILE_DIVIDER_STR << 
+		movie->director << FILE_DIVIDER_STR << movie->castCount;
 	for (size_t i = 0; i < movie->castCount; i++)
 	{
-		file << "#" << movie->cast[i];
+		file << FILE_DIVIDER_STR << movie->cast[i];
 	}
 	file << "\n";
 
@@ -151,7 +151,7 @@ Movie** getMoviesBy(const char* search, size_t& moviesCount,
 	while (file.getline(line, STR_SIZE))
 	{
 		size_t infoCount = 0;
-		char** movieInfo = split(line, '#', infoCount);
+		char** movieInfo = split(line, FILE_DIVIDER_CHAR, infoCount);
 		size_t castCount = strToNum(movieInfo[CAST_COUNT_INDEX]);
 		char** cast = new char* [castCount];
 		for (size_t i = 0; i < castCount; i++)

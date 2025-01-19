@@ -171,7 +171,7 @@ bool isInputValid(const char* input, const short maxLength)
 {
 	size_t length = strLen(input);
 	return length != 0 && length <= maxLength
-		&& !strCaseContains(input, "#");
+		&& !strCaseContains(input, FILE_DIVIDER_STR);
 }
 
 bool isYearValid(const short year)

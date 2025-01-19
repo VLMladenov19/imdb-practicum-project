@@ -17,6 +17,7 @@
 
 constexpr size_t STR_SIZE = 1024;
 
+// File related constants
 constexpr char MOVIES_FILE[] = "movies.txt";
 constexpr char FILE_DIVIDER_CHAR = '#';
 constexpr char FILE_DIVIDER_STR[] = "#";

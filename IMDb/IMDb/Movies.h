@@ -53,6 +53,7 @@ struct Movie
 	}
 };
 
+// Functions accessing file with movies
 Response addMovie(const Movie* movie);
 Response removeAllMovies();
 Response removeMovie(const size_t movieIndex);
@@ -74,6 +75,7 @@ int compareGenre(Movie* movie1, Movie* movie2);
 void sortBy(Movie** movies, const size_t moviesCount, 
 	int (*compare)(Movie*, Movie*) = [](Movie*, Movie*) { return 0; });
 
+// Functions handling dynamic memory related to the Movie struct
 Movie** fixMatrixSize(Movie** movies, size_t moviesCount);
 void freeMovie(Movie* movie);
 void freeMovieArray(Movie** movies, size_t count);
